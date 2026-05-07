@@ -9,38 +9,375 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WishlistRouteImport } from './routes/wishlist'
+import { Route as WardrobesRouteImport } from './routes/wardrobes'
+import { Route as TvUnitsRouteImport } from './routes/tv-units'
+import { Route as StudyTablesRouteImport } from './routes/study-tables'
+import { Route as SofasRouteImport } from './routes/sofas'
+import { Route as OrderConfirmationRouteImport } from './routes/order-confirmation'
+import { Route as OfficeFurnitureRouteImport } from './routes/office-furniture'
+import { Route as LuxuryDecorRouteImport } from './routes/luxury-decor'
+import { Route as DiningTablesRouteImport } from './routes/dining-tables'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CoffeeTablesRouteImport } from './routes/coffee-tables'
+import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as ChairsRouteImport } from './routes/chairs'
+import { Route as CartRouteImport } from './routes/cart'
+import { Route as BedsRouteImport } from './routes/beds'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 
+const WishlistRoute = WishlistRouteImport.update({
+  id: '/wishlist',
+  path: '/wishlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WardrobesRoute = WardrobesRouteImport.update({
+  id: '/wardrobes',
+  path: '/wardrobes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TvUnitsRoute = TvUnitsRouteImport.update({
+  id: '/tv-units',
+  path: '/tv-units',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudyTablesRoute = StudyTablesRouteImport.update({
+  id: '/study-tables',
+  path: '/study-tables',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SofasRoute = SofasRouteImport.update({
+  id: '/sofas',
+  path: '/sofas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrderConfirmationRoute = OrderConfirmationRouteImport.update({
+  id: '/order-confirmation',
+  path: '/order-confirmation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OfficeFurnitureRoute = OfficeFurnitureRouteImport.update({
+  id: '/office-furniture',
+  path: '/office-furniture',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LuxuryDecorRoute = LuxuryDecorRouteImport.update({
+  id: '/luxury-decor',
+  path: '/luxury-decor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DiningTablesRoute = DiningTablesRouteImport.update({
+  id: '/dining-tables',
+  path: '/dining-tables',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoffeeTablesRoute = CoffeeTablesRouteImport.update({
+  id: '/coffee-tables',
+  path: '/coffee-tables',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChairsRoute = ChairsRouteImport.update({
+  id: '/chairs',
+  path: '/chairs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CartRoute = CartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BedsRoute = BedsRouteImport.update({
+  id: '/beds',
+  path: '/beds',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProductsSlugRoute = ProductsSlugRouteImport.update({
+  id: '/products/$slug',
+  path: '/products/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/beds': typeof BedsRoute
+  '/cart': typeof CartRoute
+  '/chairs': typeof ChairsRoute
+  '/checkout': typeof CheckoutRoute
+  '/coffee-tables': typeof CoffeeTablesRoute
+  '/contact': typeof ContactRoute
+  '/dining-tables': typeof DiningTablesRoute
+  '/luxury-decor': typeof LuxuryDecorRoute
+  '/office-furniture': typeof OfficeFurnitureRoute
+  '/order-confirmation': typeof OrderConfirmationRoute
+  '/sofas': typeof SofasRoute
+  '/study-tables': typeof StudyTablesRoute
+  '/tv-units': typeof TvUnitsRoute
+  '/wardrobes': typeof WardrobesRoute
+  '/wishlist': typeof WishlistRoute
+  '/products/$slug': typeof ProductsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/beds': typeof BedsRoute
+  '/cart': typeof CartRoute
+  '/chairs': typeof ChairsRoute
+  '/checkout': typeof CheckoutRoute
+  '/coffee-tables': typeof CoffeeTablesRoute
+  '/contact': typeof ContactRoute
+  '/dining-tables': typeof DiningTablesRoute
+  '/luxury-decor': typeof LuxuryDecorRoute
+  '/office-furniture': typeof OfficeFurnitureRoute
+  '/order-confirmation': typeof OrderConfirmationRoute
+  '/sofas': typeof SofasRoute
+  '/study-tables': typeof StudyTablesRoute
+  '/tv-units': typeof TvUnitsRoute
+  '/wardrobes': typeof WardrobesRoute
+  '/wishlist': typeof WishlistRoute
+  '/products/$slug': typeof ProductsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/beds': typeof BedsRoute
+  '/cart': typeof CartRoute
+  '/chairs': typeof ChairsRoute
+  '/checkout': typeof CheckoutRoute
+  '/coffee-tables': typeof CoffeeTablesRoute
+  '/contact': typeof ContactRoute
+  '/dining-tables': typeof DiningTablesRoute
+  '/luxury-decor': typeof LuxuryDecorRoute
+  '/office-furniture': typeof OfficeFurnitureRoute
+  '/order-confirmation': typeof OrderConfirmationRoute
+  '/sofas': typeof SofasRoute
+  '/study-tables': typeof StudyTablesRoute
+  '/tv-units': typeof TvUnitsRoute
+  '/wardrobes': typeof WardrobesRoute
+  '/wishlist': typeof WishlistRoute
+  '/products/$slug': typeof ProductsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/beds'
+    | '/cart'
+    | '/chairs'
+    | '/checkout'
+    | '/coffee-tables'
+    | '/contact'
+    | '/dining-tables'
+    | '/luxury-decor'
+    | '/office-furniture'
+    | '/order-confirmation'
+    | '/sofas'
+    | '/study-tables'
+    | '/tv-units'
+    | '/wardrobes'
+    | '/wishlist'
+    | '/products/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/beds'
+    | '/cart'
+    | '/chairs'
+    | '/checkout'
+    | '/coffee-tables'
+    | '/contact'
+    | '/dining-tables'
+    | '/luxury-decor'
+    | '/office-furniture'
+    | '/order-confirmation'
+    | '/sofas'
+    | '/study-tables'
+    | '/tv-units'
+    | '/wardrobes'
+    | '/wishlist'
+    | '/products/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/beds'
+    | '/cart'
+    | '/chairs'
+    | '/checkout'
+    | '/coffee-tables'
+    | '/contact'
+    | '/dining-tables'
+    | '/luxury-decor'
+    | '/office-furniture'
+    | '/order-confirmation'
+    | '/sofas'
+    | '/study-tables'
+    | '/tv-units'
+    | '/wardrobes'
+    | '/wishlist'
+    | '/products/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  BedsRoute: typeof BedsRoute
+  CartRoute: typeof CartRoute
+  ChairsRoute: typeof ChairsRoute
+  CheckoutRoute: typeof CheckoutRoute
+  CoffeeTablesRoute: typeof CoffeeTablesRoute
+  ContactRoute: typeof ContactRoute
+  DiningTablesRoute: typeof DiningTablesRoute
+  LuxuryDecorRoute: typeof LuxuryDecorRoute
+  OfficeFurnitureRoute: typeof OfficeFurnitureRoute
+  OrderConfirmationRoute: typeof OrderConfirmationRoute
+  SofasRoute: typeof SofasRoute
+  StudyTablesRoute: typeof StudyTablesRoute
+  TvUnitsRoute: typeof TvUnitsRoute
+  WardrobesRoute: typeof WardrobesRoute
+  WishlistRoute: typeof WishlistRoute
+  ProductsSlugRoute: typeof ProductsSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wishlist': {
+      id: '/wishlist'
+      path: '/wishlist'
+      fullPath: '/wishlist'
+      preLoaderRoute: typeof WishlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/wardrobes': {
+      id: '/wardrobes'
+      path: '/wardrobes'
+      fullPath: '/wardrobes'
+      preLoaderRoute: typeof WardrobesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tv-units': {
+      id: '/tv-units'
+      path: '/tv-units'
+      fullPath: '/tv-units'
+      preLoaderRoute: typeof TvUnitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/study-tables': {
+      id: '/study-tables'
+      path: '/study-tables'
+      fullPath: '/study-tables'
+      preLoaderRoute: typeof StudyTablesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sofas': {
+      id: '/sofas'
+      path: '/sofas'
+      fullPath: '/sofas'
+      preLoaderRoute: typeof SofasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/order-confirmation': {
+      id: '/order-confirmation'
+      path: '/order-confirmation'
+      fullPath: '/order-confirmation'
+      preLoaderRoute: typeof OrderConfirmationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/office-furniture': {
+      id: '/office-furniture'
+      path: '/office-furniture'
+      fullPath: '/office-furniture'
+      preLoaderRoute: typeof OfficeFurnitureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/luxury-decor': {
+      id: '/luxury-decor'
+      path: '/luxury-decor'
+      fullPath: '/luxury-decor'
+      preLoaderRoute: typeof LuxuryDecorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dining-tables': {
+      id: '/dining-tables'
+      path: '/dining-tables'
+      fullPath: '/dining-tables'
+      preLoaderRoute: typeof DiningTablesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/coffee-tables': {
+      id: '/coffee-tables'
+      path: '/coffee-tables'
+      fullPath: '/coffee-tables'
+      preLoaderRoute: typeof CoffeeTablesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chairs': {
+      id: '/chairs'
+      path: '/chairs'
+      fullPath: '/chairs'
+      preLoaderRoute: typeof ChairsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/beds': {
+      id: '/beds'
+      path: '/beds'
+      fullPath: '/beds'
+      preLoaderRoute: typeof BedsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +385,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/products/$slug': {
+      id: '/products/$slug'
+      path: '/products/$slug'
+      fullPath: '/products/$slug'
+      preLoaderRoute: typeof ProductsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  BedsRoute: BedsRoute,
+  CartRoute: CartRoute,
+  ChairsRoute: ChairsRoute,
+  CheckoutRoute: CheckoutRoute,
+  CoffeeTablesRoute: CoffeeTablesRoute,
+  ContactRoute: ContactRoute,
+  DiningTablesRoute: DiningTablesRoute,
+  LuxuryDecorRoute: LuxuryDecorRoute,
+  OfficeFurnitureRoute: OfficeFurnitureRoute,
+  OrderConfirmationRoute: OrderConfirmationRoute,
+  SofasRoute: SofasRoute,
+  StudyTablesRoute: StudyTablesRoute,
+  TvUnitsRoute: TvUnitsRoute,
+  WardrobesRoute: WardrobesRoute,
+  WishlistRoute: WishlistRoute,
+  ProductsSlugRoute: ProductsSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
