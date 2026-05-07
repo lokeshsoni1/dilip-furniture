@@ -97,7 +97,7 @@ function ProductDetail() {
             <div className="mt-8">
               <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">Color</p>
               <div className="flex gap-2">
-                {product.colors.map((c) => (
+                {product.colors.map((c: string) => (
                   <button key={c} onClick={() => setColor(c)} className={`size-9 rounded-full ring-2 transition ${color === c ? "ring-foreground" : "ring-border"}`} style={{ background: c }} aria-label={`Color ${c}`} />
                 ))}
               </div>
@@ -108,7 +108,7 @@ function ProductDetail() {
               <div className="mt-6">
                 <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">Size</p>
                 <div className="flex flex-wrap gap-2">
-                  {product.sizes.map((s) => (
+                  {product.sizes.map((s: string) => (
                     <button key={s} onClick={() => setSize(s)} className={`px-4 py-2 text-sm border transition ${size === s ? "border-foreground bg-foreground text-background" : "border-border hover:border-foreground"}`}>{s}</button>
                   ))}
                 </div>
