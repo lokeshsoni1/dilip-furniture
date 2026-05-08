@@ -29,19 +29,28 @@ export function Navbar() {
   const cartCount = useCart((s) => s.count());
   const setCartOpen = useCart((s) => s.setOpen);
   const wishCount = useWishlist((s) => s.slugs.length);
+  const { pathname } = useLocation();
+  const hasHero = HERO_ROUTES.has(pathname);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => setScrolled(window.scrollY > 80);
     onScroll();
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // On hero pages: hide navbar at top, reveal on scroll. On other pages: always visible solid.
+  const hidden = hasHero && !scrolled && !mobileOpen;
+  const solid = scrolled || !hasHero;
+
   return (
     <>
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled ? "glass shadow-soft border-b border-border/50" : "bg-transparent"
+      <motion.header
+        initial={false}
+        animate={{ y: hidden ? -96 : 0, opacity: hidden ? 0 : 1 }}
+        transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-500 ${
+          solid ? "glass shadow-soft border-b border-border/50" : "bg-transparent"
         }`}
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 h-16 sm:h-20 flex items-center justify-between gap-4">
