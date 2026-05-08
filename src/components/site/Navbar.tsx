@@ -1,7 +1,12 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { Search, Heart, ShoppingBag, User, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+
+const HERO_ROUTES = new Set([
+  "/", "/sofas", "/chairs", "/beds", "/dining-tables", "/coffee-tables",
+  "/wardrobes", "/tv-units", "/study-tables", "/office-furniture", "/luxury-decor",
+]);
 import { useCart, useWishlist } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 
