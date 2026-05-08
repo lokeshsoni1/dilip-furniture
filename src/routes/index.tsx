@@ -47,36 +47,36 @@ function Home() {
           animate={{ scale: 1 }}
           transition={{ duration: 2.5, ease: [0.2, 0.8, 0.2, 1] }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-foreground/30 via-foreground/10 to-foreground/60" />
-        <div className="relative h-full flex flex-col justify-end pb-24 px-6 lg:px-16 max-w-4xl">
+        <div className="absolute inset-0 bg-gradient-to-b from-foreground/40 via-foreground/15 to-foreground/70" />
+        <div className="relative h-full flex flex-col justify-end pb-20 md:pb-28 px-6 lg:px-16 max-w-3xl">
           <motion.span
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-            className="text-xs uppercase tracking-[0.3em] text-background/80 mb-5"
+            transition={{ delay: 0.4, duration: 0.8 }}
+            className="text-[10px] sm:text-xs uppercase tracking-[0.4em] text-background/75 mb-6"
           >
             Spring Collection · 2026
           </motion.span>
           <motion.h1
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 1 }}
-            className="font-display text-5xl sm:text-7xl lg:text-8xl text-background leading-[0.95] text-balance"
+            transition={{ delay: 0.6, duration: 1.1, ease: [0.2, 0.8, 0.2, 1] }}
+            className="font-display font-light text-background leading-[1.05] tracking-tight text-balance text-[clamp(2.5rem,6vw,5.25rem)] max-w-[18ch]"
           >
-            Timeless craftsmanship for modern living
+            Timeless craftsmanship<br className="hidden sm:block" /> for modern living
           </motion.h1>
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.8 }}
-            className="text-background/85 text-base sm:text-lg max-w-xl mt-6"
+            transition={{ delay: 0.95, duration: 0.8 }}
+            className="text-background/80 text-sm sm:text-base max-w-md mt-6 leading-relaxed"
           >
-            Heirloom pieces, hand-finished by master craftsmen. Built to be lived with for generations.
+            Heirloom pieces, hand-finished by master craftsmen.
           </motion.p>
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.05, duration: 0.8 }}
+            transition={{ delay: 1.15, duration: 0.8 }}
             className="mt-10 flex flex-wrap gap-3"
           >
             <Button asChild className="h-12 px-8 text-xs tracking-widest uppercase bg-background text-foreground hover:bg-accent hover:text-accent-foreground rounded-none">
