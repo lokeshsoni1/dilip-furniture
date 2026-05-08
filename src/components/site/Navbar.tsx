@@ -111,7 +111,7 @@ export function Navbar() {
             </Button>
           </div>
         </div>
-      </header>
+      </motion.header>
 
       <AnimatePresence>
         {mobileOpen && (
