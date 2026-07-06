@@ -47,13 +47,19 @@ export function Navbar() {
     <>
       <motion.header
         initial={false}
-        animate={{ y: hidden ? -96 : 0, opacity: hidden ? 0 : 1 }}
+        animate={{ y: hidden ? -120 : 0, opacity: hidden ? 0 : 1 }}
         transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-500 ${
-          solid ? "glass shadow-soft border-b border-border/50" : "bg-transparent"
+        className={`fixed z-50 transition-all duration-500 ${
+          solid
+            ? "top-4 left-4 right-4 mx-auto max-w-6xl glass shadow-luxury border border-border/40 rounded-2xl sm:rounded-full"
+            : "top-0 left-0 right-0 bg-transparent"
         }`}
       >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 h-16 sm:h-20 flex items-center justify-between gap-4">
+        <div
+          className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 flex items-center justify-between gap-4 transition-all duration-500 ${
+            solid ? "h-14 sm:h-16" : "h-16 sm:h-20"
+          }`}
+        >
           <button
             aria-label="Menu"
             className="lg:hidden p-2 -ml-2 text-foreground"
