@@ -26,9 +26,17 @@ export const Route = createFileRoute("/")({
 const categoryGrid = ["sofas", "beds", "dining-tables", "chairs", "coffee-tables", "wardrobes", "tv-units", "study-tables", "luxury-decor"] as const;
 
 const testimonials = [
-  { name: "Aanya Mehta", city: "Mumbai", text: "The Walnut Symphony Sofa transformed our living room. Craftsmanship beyond expectation." },
-  { name: "Rohan Kapoor", city: "Bengaluru", text: "Five-star concierge experience. The bed feels like it belongs in a Milan showroom." },
-  { name: "Ishita Verma", city: "Delhi", text: "Quiet luxury in every detail. Delivered on time and assembled flawlessly." },
+  { name: "Arthur Pendelton", city: "London", text: "The custom camel-leather stitching on our sectional is absolute perfection. True heirloom quality." },
+  { name: "Eleanor Vance", city: "Boston", text: "Bespoke engineering at its finest. The royal walnut bed frame is incredibly sturdy and silent." },
+  { name: "Julian Brooks", city: "San Francisco", text: "A spectacular piece. The marble and solid brass trim detailing on the coffee table is jaw-dropping." },
+  { name: "Clara Montgomery", city: "New York", text: "Dilip Furniture scaled their dining table to match our exact room specifications. Magnificent wood grains." },
+  { name: "Harrison Ford", city: "Chicago", text: "Exceptional white-glove logistics. The mahogany wardrobe feels incredibly solid and moves like silk." },
+  { name: "Sophia Sterling", city: "Los Angeles", text: "From selection to placement, the concierge service was flawless. The accent chairs are highly ergonomic." },
+  { name: "Alastair Graham", city: "Edinburgh", text: "The premium teak oil finish has a rich organic luster. Truly master-crafted work." },
+  { name: "Vivienne Westwood", city: "Paris", text: "Stunning geometry and modernist lines. It completely redefines our master suite lounge." },
+  { name: "Dominic Thorne", city: "Sydney", text: "Dilip's team designed custom joineries for our TV console. An architect's dream partner." },
+  { name: "Genevieve Hart", city: "Toronto", text: "Sustainable teak, Belgian linen, and flawless craftsmanship. Worth every compliment." },
+  { name: "Maxwell Sterling", city: "Seattle", text: "The custom walnut desk is the centerpiece of my studio. An absolute masterpiece of carpentry." }
 ];
 
 function Home() {
@@ -45,10 +53,19 @@ function Home() {
     "https://res.cloudinary.com/dbpdexty8/image/upload/v1783504422/Lounge_area_with_couches_and_202607081522_w0ux6v.jpg"
   ];
 
+  // Auto-rotate hero slider
   useEffect(() => {
     const timer = setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % slides.length);
     }, 4000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Auto-rotate testimonials reviews carousel every 3 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTIdx((prev) => (prev + 1) % testimonials.length);
+    }, 3000);
     return () => clearInterval(timer);
   }, []);
 
@@ -260,9 +277,15 @@ function Home() {
           <p className="text-xs uppercase tracking-[0.3em] text-accent mb-4">Inner Circle</p>
           <h2 className="font-display text-4xl md:text-5xl">Join the inner circle</h2>
           <p className="mt-4 text-muted-foreground">Private previews, atelier stories, and first access to limited releases.</p>
-          <form onSubmit={(e) => e.preventDefault()} className="mt-8 flex gap-0 max-w-md mx-auto border-b border-border focus-within:border-foreground transition">
+          <form 
+            onSubmit={(e) => {
+              e.preventDefault();
+              window.location.href = "mailto:venzorx.co@gmail.com?subject=Join the Inner Circle";
+            }} 
+            className="mt-8 flex gap-0 max-w-md mx-auto border-b border-border focus-within:border-foreground transition"
+          >
             <input type="email" required placeholder="your@email.com" className="flex-1 bg-transparent py-3 outline-none text-sm" />
-            <button className="text-xs uppercase tracking-widest font-medium hover:text-accent transition">Subscribe →</button>
+            <button type="submit" className="text-xs uppercase tracking-widest font-medium hover:text-accent transition">Subscribe →</button>
           </form>
         </motion.div>
       </section>
