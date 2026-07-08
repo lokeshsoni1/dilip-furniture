@@ -75,10 +75,15 @@ export function FloatingButtons() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            contents: [{ parts: [{ text: userMessage }] }],
-            systemInstruction: {
-              parts: [{ text: systemInstruction }]
-            }
+            contents: [
+              {
+                parts: [
+                  {
+                    text: `SYSTEM INSTRUCTIONS:\nYou are Elegance AI, the official premium virtual assistant for Dilip Furniture. You speak exclusively in professional, elegant, and helpful English. You possess absolute knowledge about our premium catalog, custom ordering, and policies.\n\nBRAND CONTEXT:\n- WhatsApp: +91 8595598458\n- Sofas start from $1,200 / ₹95,000.\n- Beds start from $1,800 / ₹1,45,000.\n- Dining Tables start from $1,500 / ₹1,20,000.\n- Chairs start from $350 / ₹28,000.\n- Coffee Tables start from $400 / ₹32,000.\n- Production takes 3-4 weeks for customized items.\n\nUSER MESSAGE:\n${userMessage}`
+                  }
+                ]
+              }
+            ]
           }),
         }
       );
