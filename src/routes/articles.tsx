@@ -3,6 +3,14 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, BookOpen, Clock, Calendar } from "lucide-react";
 
+// Import unique premium lifestyle images for inline article illustrations
+import bedImg from "@/assets/bed.jpg";
+import roomBedroomImg from "@/assets/room-bedroom.jpg";
+import sofaImg from "@/assets/sofa.jpg";
+import chairImg from "@/assets/chair.jpg";
+import diningImg from "@/assets/dining.jpg";
+import roomDiningImg from "@/assets/room-dining.jpg";
+
 export const Route = createFileRoute("/articles")({
   head: () => ({
     meta: [
@@ -29,7 +37,7 @@ const articlesData = [
       },
       {
         type: "image",
-        url: "https://res.cloudinary.com/dbpdexty8/image/upload/v1783504423/Luxury_living_room_interior_warm__202607081522_mah2su.jpg",
+        url: bedImg,
         caption: "Bespoke solid wood framing undergoing dry assembly at our Jodhpur atelier."
       },
       {
@@ -42,8 +50,8 @@ const articlesData = [
       },
       {
         type: "image",
-        url: "https://res.cloudinary.com/dbpdexty8/image/upload/v1783504422/Lounge_area_with_couches_and_202607081522_w0ux6v.jpg",
-        caption: "Heirloom craftsmanship balancing heavy solid headboards with elegant silhouettes."
+        url: roomBedroomImg,
+        caption: "Heirloom craftsmanship balancing heavy solid headboards with elegant sleep silhouettes."
       },
       {
         type: "paragraph",
@@ -57,7 +65,7 @@ const articlesData = [
     category: "Luxury Styling Guide",
     date: "July 1, 2026",
     readTime: "6 min read",
-    image: "https://res.cloudinary.com/dbpdexty8/image/upload/v1783504423/Luxury_living_room_interior_warm__202607081522_mah2su.jpg",
+    image: "https://res.cloudinary.com/dbpdexty8/image/upload/v1783504423/Lounge_area_with_couches_and_202607081521_yhkceu.jpg",
     excerpt: "Interiors in 2026 pivot away from cold, stark minimalism toward rich textures and grounding tones. Read our luxury styling guide on how to integrate Camel tones without cluttering modern architecture.",
     content: [
       {
@@ -66,7 +74,7 @@ const articlesData = [
       },
       {
         type: "image",
-        url: "https://res.cloudinary.com/dbpdexty8/image/upload/v1783504423/Lounge_area_with_couches_and_202607081521_yhkceu.jpg",
+        url: sofaImg,
         caption: "A modern open-plan living room styled with warm camel upholstery and geometric solid wood details."
       },
       {
@@ -79,8 +87,8 @@ const articlesData = [
       },
       {
         type: "image",
-        url: "https://res.cloudinary.com/dbpdexty8/image/upload/v1783504425/Master_suite_lounge_with_chairs_202607081522_myy2a5.jpg",
-        caption: "Combining natural light and warm wood grains to create visual depth."
+        url: chairImg,
+        caption: "Combining natural light and warm camel-leather upholstery to create visual depth."
       },
       {
         type: "paragraph",
@@ -103,7 +111,7 @@ const articlesData = [
       },
       {
         type: "image",
-        url: "https://res.cloudinary.com/dbpdexty8/image/upload/v1783504423/Dining_room_with_wood_theme_202607081523_dcjga6.jpg",
+        url: diningImg,
         caption: "Grade-A sustainable teak logs seasoned and sliced at our Jodhpur lumber yard."
       },
       {
@@ -116,7 +124,7 @@ const articlesData = [
       },
       {
         type: "image",
-        url: "https://res.cloudinary.com/dbpdexty8/image/upload/v1783504423/Luxury_living_room_interior_warm__202607081522_mah2su.jpg",
+        url: roomDiningImg,
         caption: "Applying natural oil finishes to preserve the natural grain patterns."
       },
       {
@@ -196,19 +204,23 @@ function ArticlesPage() {
             exit={{ opacity: 0, y: 30 }}
             className="max-w-3xl mx-auto"
           >
-            <button
-              onClick={() => setSelectedArticle(null)}
-              className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground transition mb-10"
-            >
-              <ArrowLeft className="size-3.5" /> Back to Journal
-            </button>
+            <div className="block mb-8 pb-6 border-b border-border/25">
+              <button
+                onClick={() => setSelectedArticle(null)}
+                className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground transition"
+              >
+                <ArrowLeft className="size-3.5" /> Back to Journal
+              </button>
+            </div>
 
-            <span className="text-xs uppercase tracking-[0.2em] text-accent font-semibold">
-              {selectedArticle.category}
-            </span>
-            <h1 className="font-display text-4xl md:text-5xl mt-3 mb-6 leading-[1.15] text-balance">
-              {selectedArticle.title}
-            </h1>
+            <div className="flex flex-col gap-3 mb-6">
+              <span className="text-xs uppercase tracking-[0.2em] text-accent font-semibold">
+                {selectedArticle.category}
+              </span>
+              <h1 className="font-display text-4xl md:text-5xl leading-[1.15] text-balance font-light text-foreground">
+                {selectedArticle.title}
+              </h1>
+            </div>
 
             <div className="flex items-center gap-4 text-xs text-muted-foreground mb-12 pb-6 border-b border-border/50">
               <span className="flex items-center gap-1.5"><Calendar className="size-3.5" /> {selectedArticle.date}</span>
