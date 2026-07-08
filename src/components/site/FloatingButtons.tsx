@@ -95,15 +95,18 @@ export function FloatingButtons() {
       }
 
       const data = await response.json();
-      console.log("Gemini API Successful Response:", data);
+      console.log("Gemini Live Response:", data);
       
-      const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      const aiReply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
       
-      if (!reply) {
-        throw new Error("Empty candidate list returned");
+      if (aiReply && aiReply.trim()) {
+        setMessages((m) => [...m, { from: "ai", text: aiReply.trim() }]);
+      } else {
+        setMessages((m) => [
+          ...m,
+          { from: "ai", text: "Thank you for reaching out to Dilip Furniture. I am currently refreshing my product catalog. Please feel free to drop us a message directly on our WhatsApp line at +91 8595598458 for instant bespoke assistance!" },
+        ]);
       }
-      
-      setMessages((m) => [...m, { from: "ai", text: reply }]);
     } catch (err: any) {
       console.error("Gemini Connection Error:", err);
       setMessages((m) => [
