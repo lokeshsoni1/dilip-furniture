@@ -8,7 +8,7 @@ import roomDining from "@/assets/room-dining.jpg";
 import { ProductCard } from "@/components/site/ProductCard";
 import { bestsellers, trending, categoryMeta, useProductsStore } from "@/lib/products";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -36,21 +36,38 @@ function Home() {
   const products = useProductsStore((state) => state.products);
   const bestsellersList = products.filter((p) => p.bestseller).slice(0, 8);
 
+  const [activeSlide, setActiveSlide] = useState(0);
+  const slides = [
+    "https://res.cloudinary.com/dbpdexty8/image/upload/v1783504425/Master_suite_lounge_with_chairs_202607081522_myy2a5.jpg",
+    "https://res.cloudinary.com/dbpdexty8/image/upload/v1783504423/Luxury_living_room_interior_warm__202607081522_mah2su.jpg",
+    "https://res.cloudinary.com/dbpdexty8/image/upload/v1783504423/Lounge_area_with_couches_and_202607081521_yhkceu.jpg",
+    "https://res.cloudinary.com/dbpdexty8/image/upload/v1783504423/Dining_room_with_wood_theme_202607081523_dcjga6.jpg",
+    "https://res.cloudinary.com/dbpdexty8/image/upload/v1783504422/Lounge_area_with_couches_and_202607081522_w0ux6v.jpg"
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % slides.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <>
       {/* HERO */}
       <section className="relative h-[100svh] -mt-16 sm:-mt-20 overflow-hidden">
-        <motion.img
-          src={heroImg}
-          alt="Luxury living room with cream sofas and golden hour light"
-          width={1920}
-          height={1280}
-          className="absolute inset-0 w-full h-full object-cover"
-          initial={{ scale: 1.1 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 2.5, ease: [0.2, 0.8, 0.2, 1] }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-foreground/40 via-foreground/15 to-foreground/70" />
+        {slides.map((src, index) => (
+          <img
+            key={src}
+            src={src}
+            alt={`Slide ${index + 1}`}
+            className={`absolute inset-0 w-full h-full object-cover transform-gpu transition-opacity duration-1000 ${
+              index === activeSlide ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        ))}
+        {/* Fixed styling layer with dark overlay vignette & backdrop-blur */}
+        <div className="absolute inset-0 bg-black/45 backdrop-blur-[3px]" />
         <div className="relative h-full flex flex-col justify-end pb-20 md:pb-28 px-6 lg:px-16 max-w-3xl">
           <motion.span
             initial={{ opacity: 0, y: 20 }}

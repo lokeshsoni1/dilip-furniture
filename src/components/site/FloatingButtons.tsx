@@ -5,27 +5,73 @@ import { useState } from "react";
 export function FloatingButtons() {
   const [chatOpen, setChatOpen] = useState(false);
   const [messages, setMessages] = useState<{ from: "ai" | "me"; text: string }[]>([
-    { from: "ai", text: "Hey, how can I help you today? Ask me about products, delivery, or recommendations." },
+    { from: "ai", text: "Welcome to Dilip Furniture. I'm your AI Ambassador. How may I assist you with our luxury collections today?" },
   ]);
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const send = () => {
-    if (!input.trim()) return;
+  const send = async () => {
+    if (!input.trim() || loading) return;
     const text = input;
     setMessages((m) => [...m, { from: "me", text }]);
     setInput("");
-    setTimeout(() => {
+    setLoading(true);
+
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY as string;
+    if (!apiKey) {
       setMessages((m) => [
         ...m,
-        { from: "ai", text: "Lovely choice. Our concierge will be in touch shortly. Delivery is 15–20 days across India." },
+        { from: "ai", text: "I apologize, but my AI systems are offline. Please call or message us via WhatsApp." },
       ]);
-    }, 700);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            contents: [
+              {
+                role: "user",
+                parts: [
+                  {
+                    text: `You are the official AI ambassador for Dilip Furniture. You are helpful, polite, and deeply knowledgeable about our bespoke premium furniture collections, customized high-end wooden crafts, custom sizing requests, production times, and delivery policies. Use this knowledge base to answer client questions instantly. Answer concisely in 1-3 sentences. Client message: ${text}`,
+                  },
+                ],
+              },
+            ],
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to contact Gemini API");
+      }
+
+      const data = await response.json();
+      const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "Thank you. Let me check with our concierge team.";
+      setMessages((m) => [...m, { from: "ai", text: reply.trim() }]);
+    } catch (err) {
+      console.error("AI chatbot error:", err);
+      setMessages((m) => [
+        ...m,
+        { from: "ai", text: "I'm having trouble connecting right now. Please reach out to us directly on WhatsApp!" },
+      ]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <>
       <a
-        href="https://wa.me/919999999999"
+        href="https://wa.me/918595598458"
         target="_blank"
         rel="noreferrer"
         aria-label="WhatsApp"
@@ -66,14 +112,25 @@ export function FloatingButtons() {
                   </div>
                 </div>
               ))}
+              {loading && (
+                <div className="flex justify-start">
+                  <div className="bg-background border border-border rounded-bl-sm rounded-2xl px-4 py-2.5 text-xs text-muted-foreground">
+                    <span className="inline-flex gap-1">
+                      <span className="size-1.5 bg-muted-foreground rounded-full animate-bounce"></span>
+                      <span className="size-1.5 bg-muted-foreground rounded-full animate-bounce delay-75"></span>
+                      <span className="size-1.5 bg-muted-foreground rounded-full animate-bounce delay-150"></span>
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
             <div className="p-3 border-t border-border flex gap-2">
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && send()}
-                placeholder="Type a message…"
-                className="flex-1 bg-secondary rounded-full px-4 text-sm outline-none focus:ring-1 focus:ring-ring"
+                placeholder="Ask our AI Ambassador..."
+                className="flex-1 bg-secondary rounded-full px-4 text-sm outline-none focus:ring-1 focus:ring-ring text-foreground"
               />
               <button onClick={send} className="size-9 rounded-full bg-foreground text-background grid place-items-center hover:bg-accent hover:text-accent-foreground transition">
                 <Send className="size-4" />

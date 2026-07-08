@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Heart, ShoppingBag, Truck, Shield, Award, Star, Minus, Plus, Sparkles } from "lucide-react";
 import { getBySlug, formatINR, useProductsStore } from "@/lib/products";
 import { syncAssetToServer } from "@/lib/sync-asset";
-import { useCart, useWishlist } from "@/lib/store";
+import { useCart, useWishlist, useUserStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/site/ProductCard";
 import { toast } from "sonner";
@@ -56,6 +56,7 @@ function ProductDetail() {
   const add = useCart((s) => s.add);
   const toggleWish = useWishlist((s) => s.toggle);
   const wished = useWishlist((s) => s.has(product.slug));
+  const role = useUserStore((s) => s.role);
 
   const products = useProductsStore((state) => state.products);
   const related = products.filter((p) => p.category === product.category && p.slug !== product.slug).slice(0, 4);
@@ -243,57 +244,59 @@ function ProductDetail() {
             </div>
 
             {/* AI Asset Injector Admin Panel */}
-            <div className="mt-10 border-t border-border pt-8">
-              <div className="p-6 rounded-md bg-secondary/35 border border-border/80 backdrop-blur-sm relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-3 opacity-20 pointer-events-none">
-                  <Sparkles className="size-8 text-accent" />
-                </div>
-                <h3 className="font-display text-lg mb-2 text-foreground flex items-center gap-2">
-                  <Sparkles className="size-4 text-accent animate-pulse" /> AI Asset Injector
-                </h3>
-                <p className="text-xs text-muted-foreground mb-4">
-                  Generate luxury contextual scenes using Gemini Imagen 3 and inject directly into the store asset pipeline.
-                </p>
-                
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-[10px] uppercase tracking-widest text-muted-foreground block mb-1.5">Custom Prompt</label>
-                    <textarea
-                      value={prompt}
-                      onChange={(e) => setPrompt(e.target.value)}
-                      placeholder={`e.g. A photorealistic ${product.name} in a sunlit Parisian penthouse apartment, golden hour, architectural digest style.`}
-                      className="w-full min-h-[70px] text-xs bg-background/50 border border-border p-2.5 focus:border-accent focus:ring-1 focus:ring-accent outline-none transition text-foreground"
-                    />
+            {role === "admin" && (
+              <div className="mt-10 border-t border-border pt-8">
+                <div className="p-6 rounded-md bg-secondary/35 border border-border/80 backdrop-blur-sm relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-3 opacity-20 pointer-events-none">
+                    <Sparkles className="size-8 text-accent" />
                   </div>
+                  <h3 className="font-display text-lg mb-2 text-foreground flex items-center gap-2">
+                    <Sparkles className="size-4 text-accent animate-pulse" /> AI Asset Injector
+                  </h3>
+                  <p className="text-xs text-muted-foreground mb-4">
+                    Generate luxury contextual scenes using Gemini Imagen 3 and inject directly into the store asset pipeline.
+                  </p>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-[10px] uppercase tracking-widest text-muted-foreground block mb-1.5">Custom Prompt</label>
+                      <textarea
+                        value={prompt}
+                        onChange={(e) => setPrompt(e.target.value)}
+                        placeholder={`e.g. A photorealistic ${product.name} in a sunlit Parisian penthouse apartment, golden hour, architectural digest style.`}
+                        className="w-full min-h-[70px] text-xs bg-background/50 border border-border p-2.5 focus:border-accent focus:ring-1 focus:ring-accent outline-none transition text-foreground"
+                      />
+                    </div>
 
-                  <div>
-                    <label className="text-[10px] uppercase tracking-widest text-muted-foreground block mb-1.5">Gemini API Key (Optional)</label>
-                    <input
-                      type="password"
-                      value={apiKey}
-                      onChange={(e) => setApiKey(e.target.value)}
-                      placeholder="YOUR_GEMINI_API_KEY (or defaults to environment key)"
-                      className="w-full text-xs bg-background/50 border border-border px-2.5 py-2 focus:border-accent focus:ring-1 focus:ring-accent outline-none transition text-foreground"
-                    />
+                    <div>
+                      <label className="text-[10px] uppercase tracking-widest text-muted-foreground block mb-1.5">Gemini API Key (Optional)</label>
+                      <input
+                        type="password"
+                        value={apiKey}
+                        onChange={(e) => setApiKey(e.target.value)}
+                        placeholder="YOUR_GEMINI_API_KEY (or defaults to environment key)"
+                        className="w-full text-xs bg-background/50 border border-border px-2.5 py-2 focus:border-accent focus:ring-1 focus:ring-accent outline-none transition text-foreground"
+                      />
+                    </div>
+
+                    <Button
+                      onClick={handleSyncAIAsset}
+                      disabled={generating}
+                      className="w-full h-10 rounded-none text-xs tracking-widest uppercase bg-accent hover:bg-accent/90 text-accent-foreground font-semibold flex items-center justify-center gap-2 transition"
+                    >
+                      {generating ? (
+                        <>
+                          <span className="size-3.5 border-2 border-accent-foreground border-t-transparent rounded-full animate-spin"></span>
+                          Synchronizing...
+                        </>
+                      ) : (
+                        "Sync AI Asset to Dilip-Elegance Store"
+                      )}
+                    </Button>
                   </div>
-
-                  <Button
-                    onClick={handleSyncAIAsset}
-                    disabled={generating}
-                    className="w-full h-10 rounded-none text-xs tracking-widest uppercase bg-accent hover:bg-accent/90 text-accent-foreground font-semibold flex items-center justify-center gap-2 transition"
-                  >
-                    {generating ? (
-                      <>
-                        <span className="size-3.5 border-2 border-accent-foreground border-t-transparent rounded-full animate-spin"></span>
-                        Synchronizing...
-                      </>
-                    ) : (
-                      "Sync AI Asset to Dilip-Elegance Store"
-                    )}
-                  </Button>
                 </div>
               </div>
-            </div>
+            )}
 
           </motion.div>
         </div>

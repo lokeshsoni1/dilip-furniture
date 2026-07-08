@@ -64,3 +64,19 @@ export const useWishlist = create<WishState>()(
     { name: "dilip-wishlist" },
   ),
 );
+
+export type UserRole = "customer" | "admin";
+type UserStoreState = {
+  role: UserRole;
+  setRole: (role: UserRole) => void;
+};
+
+export const useUserStore = create<UserStoreState>()(
+  persist(
+    (set) => ({
+      role: "customer",
+      setRole: (role) => set({ role }),
+    }),
+    { name: "dilip-user-role" }
+  )
+);
