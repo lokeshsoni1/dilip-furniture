@@ -33,7 +33,8 @@ const testimonials = [
 
 function Home() {
   const [tIdx, setTIdx] = useState(0);
-  const bestsellersList = useProductsStore((state) => state.products.filter((p) => p.bestseller).slice(0, 8));
+  const products = useProductsStore((state) => state.products);
+  const bestsellersList = products.filter((p) => p.bestseller).slice(0, 8);
 
   return (
     <>

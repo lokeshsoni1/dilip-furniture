@@ -4,7 +4,8 @@ import { categoryMeta, useProductsStore } from "@/lib/products";
 
 export function CategoryPage({ category }: { category: string }) {
   const meta = categoryMeta[category];
-  const items = useProductsStore((state) => state.products.filter((p) => p.category === category));
+  const products = useProductsStore((state) => state.products);
+  const items = products.filter((p) => p.category === category);
 
   return (
     <>

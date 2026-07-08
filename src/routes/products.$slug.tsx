@@ -57,9 +57,8 @@ function ProductDetail() {
   const toggleWish = useWishlist((s) => s.toggle);
   const wished = useWishlist((s) => s.has(product.slug));
 
-  const related = useProductsStore((state) => 
-    state.products.filter((p) => p.category === product.category && p.slug !== product.slug).slice(0, 4)
-  );
+  const products = useProductsStore((state) => state.products);
+  const related = products.filter((p) => p.category === product.category && p.slug !== product.slug).slice(0, 4);
 
   const handleAdd = () => {
     add(product, { size, color, quantity: qty });
