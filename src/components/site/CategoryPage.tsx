@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
 import { ProductCard } from "@/components/site/ProductCard";
-import { categoryMeta, getByCategory } from "@/lib/products";
+import { categoryMeta, useProductsStore } from "@/lib/products";
 
 export function CategoryPage({ category }: { category: string }) {
   const meta = categoryMeta[category];
-  const items = getByCategory(category);
+  const items = useProductsStore((state) => state.products.filter((p) => p.category === category));
 
   return (
     <>

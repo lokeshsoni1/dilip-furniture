@@ -1,8 +1,9 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Heart, ShoppingBag, Truck, Shield, Award, Star, Minus, Plus } from "lucide-react";
-import { getBySlug, formatINR, products } from "@/lib/products";
+import { Heart, ShoppingBag, Truck, Shield, Award, Star, Minus, Plus, Sparkles } from "lucide-react";
+import { getBySlug, formatINR, useProductsStore } from "@/lib/products";
+import { syncAssetToServer } from "@/lib/sync-asset";
 import { useCart, useWishlist } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/site/ProductCard";
@@ -39,15 +40,26 @@ export const Route = createFileRoute("/products/$slug")({
 });
 
 function ProductDetail() {
-  const { product } = Route.useLoaderData();
+  const { product: initialProduct } = Route.useLoaderData();
+  const product = useProductsStore((state) => state.products.find((p) => p.slug === initialProduct.slug)) || initialProduct;
+  const updateProductImage = useProductsStore((s) => s.updateProductImage);
+
   const [size, setSize] = useState(product.sizes?.[0]);
   const [color, setColor] = useState(product.colors[0]);
   const [qty, setQty] = useState(1);
+
+  // AI Asset Injector State
+  const [prompt, setPrompt] = useState("");
+  const [apiKey, setApiKey] = useState("");
+  const [generating, setGenerating] = useState(false);
+
   const add = useCart((s) => s.add);
   const toggleWish = useWishlist((s) => s.toggle);
   const wished = useWishlist((s) => s.has(product.slug));
 
-  const related = products.filter((p) => p.category === product.category && p.slug !== product.slug).slice(0, 4);
+  const related = useProductsStore((state) => 
+    state.products.filter((p) => p.category === product.category && p.slug !== product.slug).slice(0, 4)
+  );
 
   const handleAdd = () => {
     add(product, { size, color, quantity: qty });
@@ -56,6 +68,84 @@ function ProductDetail() {
   const handleBuy = () => {
     add(product, { size, color, quantity: qty });
     toast("Delivery available within 15–20 days at your doorstep.", { description: "Proceed to checkout to complete your order." });
+  };
+
+  const handleSyncAIAsset = async () => {
+    if (!prompt.trim()) {
+      toast.error("Please enter a custom prompt for image generation.");
+      return;
+    }
+
+    const key = apiKey.trim() || (import.meta.env.VITE_GEMINI_API_KEY as string);
+    if (!key) {
+      toast.error("Please provide a Google Gemini API Key in the field or set VITE_GEMINI_API_KEY environment variable.");
+      return;
+    }
+
+    setGenerating(true);
+    toast.info("Connecting to Google Gemini Imagen 3...");
+
+    try {
+      // 1. Fetch from Google Gemini: Call the Imagen 3 API endpoint
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${key}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            instances: [
+              {
+                prompt: prompt.trim(),
+              },
+            ],
+            parameters: {
+              sampleCount: 1,
+              outputMimeType: "image/jpeg",
+              aspectRatio: "1:1",
+            },
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData?.error?.message || "Failed to generate image from Gemini API");
+      }
+
+      const data = await response.json();
+      const base64Data = data?.predictions?.[0]?.bytesBase64Encoded;
+      if (!base64Data) {
+        throw new Error("No image data returned from Gemini API predictions");
+      }
+
+      // 2. Upload directly to Cloudinary & update local data repository files + Git sync
+      toast.info("Uploading asset to Cloudinary & syncing git repo...");
+      
+      const syncResult = await syncAssetToServer({
+        slug: product.slug,
+        base64Image: base64Data,
+      });
+
+      let finalUrl = `data:image/jpeg;base64,${base64Data}`;
+      if (syncResult && syncResult.success && syncResult.secureUrl) {
+        finalUrl = syncResult.secureUrl;
+        toast.success("AI Asset successfully synchronized to Cloudinary & local Git repo!");
+      } else {
+        console.warn("Server sync returned failure, using base64 preview:", syncResult?.error);
+        toast.warning("Cloudinary upload failed. Using local base64 fallback in UI.");
+      }
+
+      // 3. Update Zustand State for instant render
+      updateProductImage(product.slug, finalUrl);
+      setPrompt("");
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error?.message || "An error occurred during the AI asset sync process.");
+    } finally {
+      setGenerating(false);
+    }
   };
 
   return (
@@ -152,6 +242,60 @@ function ProductDetail() {
                 <Spec k="Care" v="Wipe with soft dry cloth" />
               </dl>
             </div>
+
+            {/* AI Asset Injector Admin Panel */}
+            <div className="mt-10 border-t border-border pt-8">
+              <div className="p-6 rounded-md bg-secondary/35 border border-border/80 backdrop-blur-sm relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-3 opacity-20 pointer-events-none">
+                  <Sparkles className="size-8 text-accent" />
+                </div>
+                <h3 className="font-display text-lg mb-2 text-foreground flex items-center gap-2">
+                  <Sparkles className="size-4 text-accent animate-pulse" /> AI Asset Injector
+                </h3>
+                <p className="text-xs text-muted-foreground mb-4">
+                  Generate luxury contextual scenes using Gemini Imagen 3 and inject directly into the store asset pipeline.
+                </p>
+                
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-[10px] uppercase tracking-widest text-muted-foreground block mb-1.5">Custom Prompt</label>
+                    <textarea
+                      value={prompt}
+                      onChange={(e) => setPrompt(e.target.value)}
+                      placeholder={`e.g. A photorealistic ${product.name} in a sunlit Parisian penthouse apartment, golden hour, architectural digest style.`}
+                      className="w-full min-h-[70px] text-xs bg-background/50 border border-border p-2.5 focus:border-accent focus:ring-1 focus:ring-accent outline-none transition text-foreground"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] uppercase tracking-widest text-muted-foreground block mb-1.5">Gemini API Key (Optional)</label>
+                    <input
+                      type="password"
+                      value={apiKey}
+                      onChange={(e) => setApiKey(e.target.value)}
+                      placeholder="YOUR_GEMINI_API_KEY (or defaults to environment key)"
+                      className="w-full text-xs bg-background/50 border border-border px-2.5 py-2 focus:border-accent focus:ring-1 focus:ring-accent outline-none transition text-foreground"
+                    />
+                  </div>
+
+                  <Button
+                    onClick={handleSyncAIAsset}
+                    disabled={generating}
+                    className="w-full h-10 rounded-none text-xs tracking-widest uppercase bg-accent hover:bg-accent/90 text-accent-foreground font-semibold flex items-center justify-center gap-2 transition"
+                  >
+                    {generating ? (
+                      <>
+                        <span className="size-3.5 border-2 border-accent-foreground border-t-transparent rounded-full animate-spin"></span>
+                        Synchronizing...
+                      </>
+                    ) : (
+                      "Sync AI Asset to Dilip-Elegance Store"
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </div>
+
           </motion.div>
         </div>
 
@@ -204,3 +348,4 @@ function Spec({ k, v }: { k: string; v: string }) {
     </div>
   );
 }
+

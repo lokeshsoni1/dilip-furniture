@@ -6,7 +6,7 @@ import roomBedroom from "@/assets/room-bedroom.jpg";
 import roomLiving from "@/assets/room-living.jpg";
 import roomDining from "@/assets/room-dining.jpg";
 import { ProductCard } from "@/components/site/ProductCard";
-import { bestsellers, trending, categoryMeta } from "@/lib/products";
+import { bestsellers, trending, categoryMeta, useProductsStore } from "@/lib/products";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -33,6 +33,8 @@ const testimonials = [
 
 function Home() {
   const [tIdx, setTIdx] = useState(0);
+  const bestsellersList = useProductsStore((state) => state.products.filter((p) => p.bestseller).slice(0, 8));
+
   return (
     <>
       {/* HERO */}
@@ -124,7 +126,7 @@ function Home() {
       {/* BESTSELLERS */}
       <Section eyebrow="Bestsellers" title="Pieces our clients love">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-12">
-          {bestsellers().map((p, i) => <ProductCard key={p.slug} product={p} index={i} />)}
+          {bestsellersList.map((p, i) => <ProductCard key={p.slug} product={p} index={i} />)}
         </div>
       </Section>
 

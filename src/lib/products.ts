@@ -1,3 +1,5 @@
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import sofa from "@/assets/sofa.jpg";
 import bed from "@/assets/bed.jpg";
 import coffee from "@/assets/coffee.jpg";
@@ -40,7 +42,7 @@ export const categoryMeta: Record<string, { title: string; tagline: string; imag
   "luxury-decor": { title: "Luxury Decor", tagline: "The finishing notes.", image: decor },
 };
 
-export const products: Product[] = [
+export const initialProducts: Product[] = [
   { slug: "walnut-symphony-sofa", name: "Walnut Symphony Sofa", category: "sofas", price: 184000, mrp: 219000, image: sofa, colors: ["#e9dcc4", "#3a2a1c", "#5a4133"], sizes: ["2 Seater", "3 Seater", "L-Shape"], rating: 4.9, reviews: 142, material: "Solid walnut frame, Italian boucle upholstery", description: "A sculptural silhouette balanced on hand-finished walnut legs. Down-wrapped cushions invite long evenings.", dimensions: "W 220 × D 92 × H 84 cm", bestseller: true, trending: true },
   { slug: "ivory-cloud-sectional", name: "Ivory Cloud Modular Sectional", category: "sofas", price: 312000, image: sofa, colors: ["#f0e6d2", "#c9a87a"], sizes: ["L-Shape", "U-Shape"], rating: 4.8, reviews: 96, material: "Belgian linen, kiln-dried ash", description: "Modular geometry meets cloud-like comfort. Reconfigure as your space evolves.", dimensions: "W 320 × D 180 × H 78 cm", bestseller: true },
 
@@ -72,14 +74,43 @@ export const products: Product[] = [
   { slug: "ceramic-vessel-collection", name: "Ceramic Vessel Collection", category: "luxury-decor", price: 12800, image: decor, colors: ["#f5f1ea", "#9a8a72"], rating: 4.7, reviews: 88, material: "Hand-thrown stoneware", description: "A curated set of three hand-thrown ceramic vessels.", dimensions: "Set of three" },
 ];
 
+export interface ProductsState {
+  products: Product[];
+  updateProductImage: (slug: string, newImage: string) => void;
+  resetProducts: () => void;
+}
+
+export const useProductsStore = create<ProductsState>()(
+  persist(
+    (set) => ({
+      products: initialProducts,
+      updateProductImage: (slug, newImage) =>
+        set((state) => ({
+          products: state.products.map((p) =>
+            p.slug === slug ? { ...p, image: newImage } : p
+          ),
+        })),
+      resetProducts: () => set({ products: initialProducts }),
+    }),
+    { name: "dilip-products" }
+  )
+);
+
+// Helper functions that access the latest Zustand store state
+export const products: Product[] = initialProducts; // for legacy static fallback if needed
+
 export const getByCategory = (category: string) =>
-  products.filter((p) => p.category === category);
+  useProductsStore.getState().products.filter((p) => p.category === category);
 
 export const getBySlug = (slug: string) =>
-  products.find((p) => p.slug === slug);
+  useProductsStore.getState().products.find((p) => p.slug === slug);
 
-export const bestsellers = () => products.filter((p) => p.bestseller).slice(0, 8);
-export const trending = () => products.filter((p) => p.trending).slice(0, 6);
+export const bestsellers = () =>
+  useProductsStore.getState().products.filter((p) => p.bestseller).slice(0, 8);
+
+export const trending = () =>
+  useProductsStore.getState().products.filter((p) => p.trending).slice(0, 6);
 
 export const formatINR = (n: number) =>
   new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(n);
+
