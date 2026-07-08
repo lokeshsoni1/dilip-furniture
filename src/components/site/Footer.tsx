@@ -19,10 +19,11 @@ export function Footer() {
         <div>
           <h4 className="text-xs uppercase tracking-widest text-muted-foreground mb-4">Shop</h4>
           <ul className="space-y-2 text-sm">
-            <li><Link to="/sofas" className="hover:text-accent">Sofas</Link></li>
-            <li><Link to="/beds" className="hover:text-accent">Beds</Link></li>
-            <li><Link to="/dining-tables" className="hover:text-accent">Dining</Link></li>
-            <li><Link to="/luxury-decor" className="hover:text-accent">Decor</Link></li>
+            <li><Link to="/collections/sofas" className="hover:text-accent">Sofas</Link></li>
+            <li><Link to="/collections/beds" className="hover:text-accent">Beds</Link></li>
+            <li><Link to="/collections/dining-tables" className="hover:text-accent">Dining Tables</Link></li>
+            <li><Link to="/collections/luxury-decor" className="hover:text-accent">Luxury Decor</Link></li>
+            <li><Link to="/collections" className="hover:text-accent font-medium">All Collections</Link></li>
           </ul>
         </div>
         <div>
@@ -30,8 +31,8 @@ export function Footer() {
           <ul className="space-y-2 text-sm">
             <li><Link to="/about" className="hover:text-accent">About</Link></li>
             <li><Link to="/contact" className="hover:text-accent">Contact</Link></li>
-            <li><a href="#" className="hover:text-accent">Care Guide</a></li>
-            <li><a href="#" className="hover:text-accent">Trade Program</a></li>
+            <li><Link to="/care-guide" className="hover:text-accent">Care Guide</Link></li>
+            <li><Link to="/trade-program" className="hover:text-accent">Trade Program</Link></li>
           </ul>
         </div>
       </div>

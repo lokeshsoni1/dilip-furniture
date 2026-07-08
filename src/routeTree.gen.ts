@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as WishlistRouteImport } from './routes/wishlist'
 import { Route as WardrobesRouteImport } from './routes/wardrobes'
 import { Route as TvUnitsRouteImport } from './routes/tv-units'
+import { Route as TradeProgramRouteImport } from './routes/trade-program'
 import { Route as StudyTablesRouteImport } from './routes/study-tables'
 import { Route as SofasRouteImport } from './routes/sofas'
 import { Route as OrderConfirmationRouteImport } from './routes/order-confirmation'
@@ -20,10 +21,12 @@ import { Route as LuxuryDecorRouteImport } from './routes/luxury-decor'
 import { Route as FaqsRouteImport } from './routes/faqs'
 import { Route as DiningTablesRouteImport } from './routes/dining-tables'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CollectionsRouteImport } from './routes/collections'
 import { Route as CoffeeTablesRouteImport } from './routes/coffee-tables'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ChairsRouteImport } from './routes/chairs'
 import { Route as CartRouteImport } from './routes/cart'
+import { Route as CareGuideRouteImport } from './routes/care-guide'
 import { Route as BedsRouteImport } from './routes/beds'
 import { Route as ArticlesRouteImport } from './routes/articles'
 import { Route as AboutRouteImport } from './routes/about'
@@ -44,6 +47,11 @@ const WardrobesRoute = WardrobesRouteImport.update({
 const TvUnitsRoute = TvUnitsRouteImport.update({
   id: '/tv-units',
   path: '/tv-units',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TradeProgramRoute = TradeProgramRouteImport.update({
+  id: '/trade-program',
+  path: '/trade-program',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StudyTablesRoute = StudyTablesRouteImport.update({
@@ -86,6 +94,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CollectionsRoute = CollectionsRouteImport.update({
+  id: '/collections',
+  path: '/collections',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoffeeTablesRoute = CoffeeTablesRouteImport.update({
   id: '/coffee-tables',
   path: '/coffee-tables',
@@ -104,6 +117,11 @@ const ChairsRoute = ChairsRouteImport.update({
 const CartRoute = CartRouteImport.update({
   id: '/cart',
   path: '/cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CareGuideRoute = CareGuideRouteImport.update({
+  id: '/care-guide',
+  path: '/care-guide',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BedsRoute = BedsRouteImport.update({
@@ -132,9 +150,9 @@ const ProductsSlugRoute = ProductsSlugRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const CollectionsCategoryRoute = CollectionsCategoryRouteImport.update({
-  id: '/collections/$category',
-  path: '/collections/$category',
-  getParentRoute: () => rootRouteImport,
+  id: '/$category',
+  path: '/$category',
+  getParentRoute: () => CollectionsRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -142,10 +160,12 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/articles': typeof ArticlesRoute
   '/beds': typeof BedsRoute
+  '/care-guide': typeof CareGuideRoute
   '/cart': typeof CartRoute
   '/chairs': typeof ChairsRoute
   '/checkout': typeof CheckoutRoute
   '/coffee-tables': typeof CoffeeTablesRoute
+  '/collections': typeof CollectionsRouteWithChildren
   '/contact': typeof ContactRoute
   '/dining-tables': typeof DiningTablesRoute
   '/faqs': typeof FaqsRoute
@@ -154,6 +174,7 @@ export interface FileRoutesByFullPath {
   '/order-confirmation': typeof OrderConfirmationRoute
   '/sofas': typeof SofasRoute
   '/study-tables': typeof StudyTablesRoute
+  '/trade-program': typeof TradeProgramRoute
   '/tv-units': typeof TvUnitsRoute
   '/wardrobes': typeof WardrobesRoute
   '/wishlist': typeof WishlistRoute
@@ -165,10 +186,12 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/articles': typeof ArticlesRoute
   '/beds': typeof BedsRoute
+  '/care-guide': typeof CareGuideRoute
   '/cart': typeof CartRoute
   '/chairs': typeof ChairsRoute
   '/checkout': typeof CheckoutRoute
   '/coffee-tables': typeof CoffeeTablesRoute
+  '/collections': typeof CollectionsRouteWithChildren
   '/contact': typeof ContactRoute
   '/dining-tables': typeof DiningTablesRoute
   '/faqs': typeof FaqsRoute
@@ -177,6 +200,7 @@ export interface FileRoutesByTo {
   '/order-confirmation': typeof OrderConfirmationRoute
   '/sofas': typeof SofasRoute
   '/study-tables': typeof StudyTablesRoute
+  '/trade-program': typeof TradeProgramRoute
   '/tv-units': typeof TvUnitsRoute
   '/wardrobes': typeof WardrobesRoute
   '/wishlist': typeof WishlistRoute
@@ -189,10 +213,12 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/articles': typeof ArticlesRoute
   '/beds': typeof BedsRoute
+  '/care-guide': typeof CareGuideRoute
   '/cart': typeof CartRoute
   '/chairs': typeof ChairsRoute
   '/checkout': typeof CheckoutRoute
   '/coffee-tables': typeof CoffeeTablesRoute
+  '/collections': typeof CollectionsRouteWithChildren
   '/contact': typeof ContactRoute
   '/dining-tables': typeof DiningTablesRoute
   '/faqs': typeof FaqsRoute
@@ -201,6 +227,7 @@ export interface FileRoutesById {
   '/order-confirmation': typeof OrderConfirmationRoute
   '/sofas': typeof SofasRoute
   '/study-tables': typeof StudyTablesRoute
+  '/trade-program': typeof TradeProgramRoute
   '/tv-units': typeof TvUnitsRoute
   '/wardrobes': typeof WardrobesRoute
   '/wishlist': typeof WishlistRoute
@@ -214,10 +241,12 @@ export interface FileRouteTypes {
     | '/about'
     | '/articles'
     | '/beds'
+    | '/care-guide'
     | '/cart'
     | '/chairs'
     | '/checkout'
     | '/coffee-tables'
+    | '/collections'
     | '/contact'
     | '/dining-tables'
     | '/faqs'
@@ -226,6 +255,7 @@ export interface FileRouteTypes {
     | '/order-confirmation'
     | '/sofas'
     | '/study-tables'
+    | '/trade-program'
     | '/tv-units'
     | '/wardrobes'
     | '/wishlist'
@@ -237,10 +267,12 @@ export interface FileRouteTypes {
     | '/about'
     | '/articles'
     | '/beds'
+    | '/care-guide'
     | '/cart'
     | '/chairs'
     | '/checkout'
     | '/coffee-tables'
+    | '/collections'
     | '/contact'
     | '/dining-tables'
     | '/faqs'
@@ -249,6 +281,7 @@ export interface FileRouteTypes {
     | '/order-confirmation'
     | '/sofas'
     | '/study-tables'
+    | '/trade-program'
     | '/tv-units'
     | '/wardrobes'
     | '/wishlist'
@@ -260,10 +293,12 @@ export interface FileRouteTypes {
     | '/about'
     | '/articles'
     | '/beds'
+    | '/care-guide'
     | '/cart'
     | '/chairs'
     | '/checkout'
     | '/coffee-tables'
+    | '/collections'
     | '/contact'
     | '/dining-tables'
     | '/faqs'
@@ -272,6 +307,7 @@ export interface FileRouteTypes {
     | '/order-confirmation'
     | '/sofas'
     | '/study-tables'
+    | '/trade-program'
     | '/tv-units'
     | '/wardrobes'
     | '/wishlist'
@@ -284,10 +320,12 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   ArticlesRoute: typeof ArticlesRoute
   BedsRoute: typeof BedsRoute
+  CareGuideRoute: typeof CareGuideRoute
   CartRoute: typeof CartRoute
   ChairsRoute: typeof ChairsRoute
   CheckoutRoute: typeof CheckoutRoute
   CoffeeTablesRoute: typeof CoffeeTablesRoute
+  CollectionsRoute: typeof CollectionsRouteWithChildren
   ContactRoute: typeof ContactRoute
   DiningTablesRoute: typeof DiningTablesRoute
   FaqsRoute: typeof FaqsRoute
@@ -296,10 +334,10 @@ export interface RootRouteChildren {
   OrderConfirmationRoute: typeof OrderConfirmationRoute
   SofasRoute: typeof SofasRoute
   StudyTablesRoute: typeof StudyTablesRoute
+  TradeProgramRoute: typeof TradeProgramRoute
   TvUnitsRoute: typeof TvUnitsRoute
   WardrobesRoute: typeof WardrobesRoute
   WishlistRoute: typeof WishlistRoute
-  CollectionsCategoryRoute: typeof CollectionsCategoryRoute
   ProductsSlugRoute: typeof ProductsSlugRoute
 }
 
@@ -324,6 +362,13 @@ declare module '@tanstack/react-router' {
       path: '/tv-units'
       fullPath: '/tv-units'
       preLoaderRoute: typeof TvUnitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trade-program': {
+      id: '/trade-program'
+      path: '/trade-program'
+      fullPath: '/trade-program'
+      preLoaderRoute: typeof TradeProgramRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/study-tables': {
@@ -382,6 +427,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/collections': {
+      id: '/collections'
+      path: '/collections'
+      fullPath: '/collections'
+      preLoaderRoute: typeof CollectionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/coffee-tables': {
       id: '/coffee-tables'
       path: '/coffee-tables'
@@ -408,6 +460,13 @@ declare module '@tanstack/react-router' {
       path: '/cart'
       fullPath: '/cart'
       preLoaderRoute: typeof CartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/care-guide': {
+      id: '/care-guide'
+      path: '/care-guide'
+      fullPath: '/care-guide'
+      preLoaderRoute: typeof CareGuideRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/beds': {
@@ -447,23 +506,37 @@ declare module '@tanstack/react-router' {
     }
     '/collections/$category': {
       id: '/collections/$category'
-      path: '/collections/$category'
+      path: '/$category'
       fullPath: '/collections/$category'
       preLoaderRoute: typeof CollectionsCategoryRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof CollectionsRoute
     }
   }
 }
+
+interface CollectionsRouteChildren {
+  CollectionsCategoryRoute: typeof CollectionsCategoryRoute
+}
+
+const CollectionsRouteChildren: CollectionsRouteChildren = {
+  CollectionsCategoryRoute: CollectionsCategoryRoute,
+}
+
+const CollectionsRouteWithChildren = CollectionsRoute._addFileChildren(
+  CollectionsRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   ArticlesRoute: ArticlesRoute,
   BedsRoute: BedsRoute,
+  CareGuideRoute: CareGuideRoute,
   CartRoute: CartRoute,
   ChairsRoute: ChairsRoute,
   CheckoutRoute: CheckoutRoute,
   CoffeeTablesRoute: CoffeeTablesRoute,
+  CollectionsRoute: CollectionsRouteWithChildren,
   ContactRoute: ContactRoute,
   DiningTablesRoute: DiningTablesRoute,
   FaqsRoute: FaqsRoute,
@@ -472,10 +545,10 @@ const rootRouteChildren: RootRouteChildren = {
   OrderConfirmationRoute: OrderConfirmationRoute,
   SofasRoute: SofasRoute,
   StudyTablesRoute: StudyTablesRoute,
+  TradeProgramRoute: TradeProgramRoute,
   TvUnitsRoute: TvUnitsRoute,
   WardrobesRoute: WardrobesRoute,
   WishlistRoute: WishlistRoute,
-  CollectionsCategoryRoute: CollectionsCategoryRoute,
   ProductsSlugRoute: ProductsSlugRoute,
 }
 export const routeTree = rootRouteImport

@@ -101,7 +101,11 @@ export function Navbar() {
             <Menu className="size-5" />
           </button>
 
-          <Link to="/" className="font-display text-xl sm:text-2xl tracking-wide text-foreground">
+          <Link 
+            to="/" 
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="font-display text-xl sm:text-2xl tracking-wide text-foreground"
+          >
             Dilip <span className="text-accent">Furniture</span>
           </Link>
 
@@ -151,6 +155,9 @@ export function Navbar() {
             </Link>
             <Link to="/faqs" className="text-foreground/80 hover:text-foreground underline-gold py-1">
               FAQs
+            </Link>
+            <Link to="/about" className="text-foreground/80 hover:text-foreground underline-gold py-1">
+              About
             </Link>
             <Link to="/contact" className="text-foreground/80 hover:text-foreground underline-gold py-1">
               Contact

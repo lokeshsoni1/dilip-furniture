@@ -66,8 +66,14 @@ function Home() {
             }`}
           />
         ))}
-        {/* Fixed styling layer with dark overlay vignette & backdrop-blur */}
-        <div className="absolute inset-0 bg-black/45 backdrop-blur-[3px]" />
+        {/* Fixed styling layer with dark overlay vignette & directional horizontal backdrop-blur gradient mask */}
+        <div 
+          className="absolute inset-0 bg-black/45 backdrop-blur-[3px]" 
+          style={{
+            maskImage: "linear-gradient(to right, black 30%, transparent 70%)",
+            WebkitMaskImage: "linear-gradient(to right, black 30%, transparent 70%)"
+          }}
+        />
         <div className="relative h-full flex flex-col justify-end pb-20 md:pb-28 px-6 lg:px-16 max-w-3xl">
           <motion.span
             initial={{ opacity: 0, y: 20 }}
@@ -100,7 +106,7 @@ function Home() {
             className="mt-10 flex flex-wrap gap-3"
           >
             <Button asChild className="h-12 px-8 text-xs tracking-widest uppercase bg-background text-foreground hover:bg-accent hover:text-accent-foreground rounded-none">
-              <Link to="/sofas">Shop Collections</Link>
+              <Link to="/collections">Shop Collections</Link>
             </Button>
             <Button asChild variant="outline" className="h-12 px-8 text-xs tracking-widest uppercase bg-transparent border-background/40 text-background hover:bg-background hover:text-foreground rounded-none">
               <Link to="/about">Our Story</Link>
