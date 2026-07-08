@@ -1,14 +1,51 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+
+type GeminiMessage = {
+  role: "user" | "model";
+  parts: { text: string }[];
+};
 
 export function FloatingButtons() {
   const [chatOpen, setChatOpen] = useState(false);
   const [messages, setMessages] = useState<{ from: "ai" | "me"; text: string }[]>([
-    { from: "ai", text: "Welcome to Dilip Furniture. I'm your AI Ambassador. How may I assist you with our luxury collections today?" },
+    {
+      from: "ai",
+      text: "Welcome to Dilip Furniture. I'm Elegance AI, your premium virtual assistant. How may I assist you with our luxury collections today?",
+    },
   ]);
+  const [history, setHistory] = useState<GeminiMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to the bottom of the chat window on new messages
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages, loading]);
+
+  const systemInstruction = `You are 'Elegance AI', the official premium virtual assistant for Dilip Furniture. You speak exclusively in professional, elegant, and helpful English. You possess absolute knowledge about our premium catalog, custom ordering, and policies. If a customer asks about specific products, customization, or pricing, refer to the official details provided below:
+
+- BRAND & CRAFTSMANSHIP: Bespoke, luxury, premium wooden furniture. Custom sizing, fabric changes (like premium camel-skin leather, ivory tones, velvet upholstery), and polish customization are fully available upon request.
+- CONTACT & INTEGRATIONS: Official WhatsApp Contact Support Number is +91 8595598458. Customers can click the floating WhatsApp widget on the screen to talk directly to the owner.
+- COLLECTIONS CATALOG & BASE PRICING GUIDE:
+  * Sofas: Luxury leather and fabric sectional couches. Starting from $1,200 / ₹95,000.
+  * Beds: Hand-finished royal wooden bed structures and master suites. Starting from $1,800 / ₹1,45,000.
+  * Dining Tables: Smooth premium light oak and marble top tables. Starting from $1,500 / ₹1,20,000.
+  * Chairs: Ergonomic and modern accent lounge chairs. Starting from $350 / ₹28,000.
+  * Coffee Tables: Sleek minimalist wood, marble, and brass trim center tables. Starting from $400 / ₹32,000.
+  * Wardrobes, TV Units, Study Tables, and Luxury Decor items are entirely custom-priced based on specific wood type (e.g., Sustainable Teak Wood, Mahogany) and room dimensions.
+- LOGISTICS & TIMELINES: Standard production takes 3-4 weeks for customized heirloom items. White-glove delivery is safely managed across regions.
+
+RESPONSE RULES:
+1. Always be welcoming, polite, and executive in tone.
+2. If the user asks for pricing or product parameters, provide the details above clearly using bullet points.
+3. Encourage users to connect on WhatsApp for custom size ordering or trade program benefits.
+4. Keep answers concise, informative, and structurally beautiful. Never break character.`;
 
   const send = async () => {
     if (!input.trim() || loading) return;
@@ -21,11 +58,18 @@ export function FloatingButtons() {
     if (!apiKey) {
       setMessages((m) => [
         ...m,
-        { from: "ai", text: "I apologize, but my AI systems are offline. Please call or message us via WhatsApp." },
+        { from: "ai", text: "I apologize, but my AI ambassador services are currently offline. Please click the green WhatsApp button to speak with us directly." },
       ]);
       setLoading(false);
       return;
     }
+
+    // Append user input to history
+    const updatedHistory: GeminiMessage[] = [
+      ...history,
+      { role: "user", parts: [{ text }] }
+    ];
+    setHistory(updatedHistory);
 
     try {
       const response = await fetch(
@@ -36,16 +80,10 @@ export function FloatingButtons() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            contents: [
-              {
-                role: "user",
-                parts: [
-                  {
-                    text: `You are the official AI ambassador for Dilip Furniture. You are helpful, polite, and deeply knowledgeable about our bespoke premium furniture collections, customized high-end wooden crafts, custom sizing requests, production times, and delivery policies. Use this knowledge base to answer client questions instantly. Answer concisely in 1-3 sentences. Client message: ${text}`,
-                  },
-                ],
-              },
-            ],
+            contents: updatedHistory,
+            systemInstruction: {
+              parts: [{ text: systemInstruction }]
+            }
           }),
         }
       );
@@ -56,12 +94,15 @@ export function FloatingButtons() {
 
       const data = await response.json();
       const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "Thank you. Let me check with our concierge team.";
+      
+      // Update local history and UI messages
+      setHistory((h) => [...h, { role: "model", parts: [{ text: reply }] }]);
       setMessages((m) => [...m, { from: "ai", text: reply.trim() }]);
     } catch (err) {
       console.error("AI chatbot error:", err);
       setMessages((m) => [
         ...m,
-        { from: "ai", text: "I'm having trouble connecting right now. Please reach out to us directly on WhatsApp!" },
+        { from: "ai", text: "I'm having trouble connecting to my service right now. Please reach out directly on WhatsApp!" },
       ]);
     } finally {
       setLoading(false);
@@ -95,27 +136,38 @@ export function FloatingButtons() {
             initial={{ opacity: 0, y: 20, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.96 }}
-            className="fixed bottom-24 right-6 z-50 w-[340px] max-w-[calc(100vw-2rem)] h-[460px] bg-background rounded-lg shadow-luxury border border-border flex flex-col overflow-hidden"
+            className="fixed bottom-24 right-6 z-50 w-[380px] max-w-[calc(100vw-2rem)] h-[480px] bg-background rounded-lg shadow-luxury border border-border flex flex-col overflow-hidden"
           >
             <div className="px-5 py-4 border-b border-border flex items-center justify-between gradient-warm">
               <div>
                 <h3 className="font-display text-lg leading-none">Dilip Concierge</h3>
-                <p className="text-[11px] text-muted-foreground mt-1">Online · Replies instantly</p>
+                <p className="text-[11px] text-muted-foreground mt-1">Elegance AI · Online</p>
               </div>
               <button onClick={() => setChatOpen(false)}><X className="size-4" /></button>
             </div>
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-secondary/30">
+            
+            {/* Scrollable messages container */}
+            <div 
+              ref={scrollRef}
+              className="flex-1 overflow-y-auto p-4 space-y-3 bg-secondary/35 scroll-smooth"
+            >
               {messages.map((m, i) => (
                 <div key={i} className={`flex ${m.from === "me" ? "justify-end" : "justify-start"}`}>
-                  <div className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm ${m.from === "me" ? "bg-foreground text-background rounded-br-sm" : "bg-background border border-border rounded-bl-sm"}`}>
+                  <div 
+                    className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-xs sm:text-sm break-words whitespace-pre-wrap leading-relaxed shadow-sm ${
+                      m.from === "me" 
+                        ? "bg-foreground text-background rounded-br-sm" 
+                        : "bg-background border border-border rounded-bl-sm text-foreground/90"
+                    }`}
+                  >
                     {m.text}
                   </div>
                 </div>
               ))}
               {loading && (
                 <div className="flex justify-start">
-                  <div className="bg-background border border-border rounded-bl-sm rounded-2xl px-4 py-2.5 text-xs text-muted-foreground">
-                    <span className="inline-flex gap-1">
+                  <div className="bg-background border border-border rounded-bl-sm rounded-2xl px-4 py-2 text-xs text-muted-foreground">
+                    <span className="inline-flex gap-1.5 items-center">
                       <span className="size-1.5 bg-muted-foreground rounded-full animate-bounce"></span>
                       <span className="size-1.5 bg-muted-foreground rounded-full animate-bounce delay-75"></span>
                       <span className="size-1.5 bg-muted-foreground rounded-full animate-bounce delay-150"></span>
@@ -124,15 +176,16 @@ export function FloatingButtons() {
                 </div>
               )}
             </div>
+            
             <div className="p-3 border-t border-border flex gap-2">
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && send()}
-                placeholder="Ask our AI Ambassador..."
-                className="flex-1 bg-secondary rounded-full px-4 text-sm outline-none focus:ring-1 focus:ring-ring text-foreground"
+                placeholder="Ask Elegance AI about products or pricing..."
+                className="flex-1 bg-secondary rounded-full px-4 text-xs sm:text-sm outline-none focus:ring-1 focus:ring-ring text-foreground"
               />
-              <button onClick={send} className="size-9 rounded-full bg-foreground text-background grid place-items-center hover:bg-accent hover:text-accent-foreground transition">
+              <button onClick={send} className="size-9 rounded-full bg-foreground text-background grid place-items-center hover:bg-accent hover:text-accent-foreground transition shrink-0">
                 <Send className="size-4" />
               </button>
             </div>
